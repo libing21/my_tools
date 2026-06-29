@@ -1,0 +1,17 @@
+version: "Apple Swift version 6.1.2 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)"
+options: "f03d0acf9104af23f38d52314318062994f3357ae380a414532159fadd64c487"
+build_start_time: [1782739430, 267720000]
+build_end_time: [1782739471, 719288000]
+inputs:
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/App.swift": [1782739031, 715717616]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Components.swift": [1782739327, 196907992]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ContentView.swift": [1782739017, 898574371]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/HotKeyManager.swift": [1782738962, 395612451]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ToolRegistry.swift": [1782738984, 505573312]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/CodecViews.swift": [1782739206, 232230672]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/HashTimeViews.swift": [1782739244, 198078030]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONEscapeView.swift": [1782739154, 459469333]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONFormatView.swift": [1782739044, 604448751]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONYAMLView.swift": [1782739142, 23953239]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JWTView.swift": [1782739221, 737416002]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/TextDiffView.swift": [1782739189, 14123972]

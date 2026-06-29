@@ -1,0 +1,77 @@
+{
+  "": {
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/master.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/App.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/App.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/App.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/App~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/App.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Components.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/Components.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/Components.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/Components~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/Components.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ContentView.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ContentView.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ContentView.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ContentView~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ContentView.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/HotKeyManager.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HotKeyManager.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HotKeyManager.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HotKeyManager~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HotKeyManager.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ToolRegistry.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ToolRegistry.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ToolRegistry.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ToolRegistry~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ToolRegistry.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/CodecViews.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/CodecViews.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/CodecViews.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/CodecViews~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/CodecViews.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/HashTimeViews.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HashTimeViews.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HashTimeViews.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HashTimeViews~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HashTimeViews.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONEscapeView.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONEscapeView.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONEscapeView.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONEscapeView~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONEscapeView.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONFormatView.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONFormatView.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONFormatView.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONFormatView~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONFormatView.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONYAMLView.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONYAMLView.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONYAMLView.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONYAMLView~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONYAMLView.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JWTView.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JWTView.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JWTView.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JWTView~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JWTView.swiftdeps"
+  },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/TextDiffView.swift": {
+    "dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/TextDiffView.d",
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/TextDiffView.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/TextDiffView~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/TextDiffView.swiftdeps"
+  }
+}

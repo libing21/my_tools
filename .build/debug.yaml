@@ -1,0 +1,81 @@
+client:
+  name: basic
+  file-system: device-agnostic
+tools: {}
+targets:
+  "DevToolbox-arm64-apple-macosx15.0-debug.exe": ["<DevToolbox-arm64-apple-macosx15.0-debug.exe>"]
+  "DevToolbox-arm64-apple-macosx15.0-debug.module": ["<DevToolbox-arm64-apple-macosx15.0-debug.module>"]
+  "PackageStructure": ["<PackageStructure>"]
+  "main": ["<DevToolbox-arm64-apple-macosx15.0-debug.exe>","<DevToolbox-arm64-apple-macosx15.0-debug.module>"]
+  "test": ["<DevToolbox-arm64-apple-macosx15.0-debug.exe>","<DevToolbox-arm64-apple-macosx15.0-debug.module>"]
+default: "main"
+nodes:
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/":
+    is-directory-structure: true
+    content-exclusion-patterns: [".git",".build"]
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox":
+    is-mutated: true
+commands:
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox-entitlement.plist":
+    tool: write-auxiliary-file
+    inputs: ["<entitlement-plist>","<com.apple.security.get-task-allow>"]
+    outputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox-entitlement.plist"]
+    description: "Write auxiliary file /Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox-entitlement.plist"
+
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/sources":
+    tool: write-auxiliary-file
+    inputs: ["<sources-file-list>","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/App.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Components.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ContentView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/HotKeyManager.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ToolRegistry.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/CodecViews.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/HashTimeViews.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONEscapeView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONFormatView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONYAMLView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JWTView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/TextDiffView.swift"]
+    outputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/sources"]
+    description: "Write auxiliary file /Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/sources"
+
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.product/Objects.LinkFileList":
+    tool: write-auxiliary-file
+    inputs: ["<link-file-list>","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/App.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/CodecViews.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/Components.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ContentView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HashTimeViews.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HotKeyManager.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONEscapeView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONFormatView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONYAMLView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JWTView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/TextDiffView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ToolRegistry.swift.o"]
+    outputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.product/Objects.LinkFileList"]
+    description: "Write auxiliary file /Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.product/Objects.LinkFileList"
+
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt":
+    tool: write-auxiliary-file
+    inputs: ["<swift-get-version>","/Library/Developer/CommandLineTools/usr/bin/swiftc"]
+    outputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"]
+    always-out-of-date: "true"
+    description: "Write auxiliary file /Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+
+  "<DevToolbox-arm64-apple-macosx15.0-debug.exe>":
+    tool: phony
+    inputs: ["<DevToolbox-arm64-apple-macosx15.0-debug.exe-CodeSigning>"]
+    outputs: ["<DevToolbox-arm64-apple-macosx15.0-debug.exe>"]
+
+  "<DevToolbox-arm64-apple-macosx15.0-debug.module>":
+    tool: phony
+    inputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/App.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/Components.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ContentView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HotKeyManager.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ToolRegistry.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/CodecViews.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HashTimeViews.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONEscapeView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONFormatView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONYAMLView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JWTView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/TextDiffView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/Modules/DevToolbox.swiftmodule"]
+    outputs: ["<DevToolbox-arm64-apple-macosx15.0-debug.module>"]
+
+  "C.DevToolbox-arm64-apple-macosx15.0-debug.exe":
+    tool: shell
+    inputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/App.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/CodecViews.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/Components.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ContentView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HashTimeViews.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HotKeyManager.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONEscapeView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONFormatView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONYAMLView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JWTView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/TextDiffView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ToolRegistry.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.product/Objects.LinkFileList"]
+    outputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox"]
+    description: "Linking ./.build/arm64-apple-macosx/debug/DevToolbox"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-L","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug","-o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox","-module-name","DevToolbox","-Xlinker","-no_warn_duplicate_libraries","-emit-executable","-Xlinker","-alias","-Xlinker","_DevToolbox_main","-Xlinker","_main","-Xlinker","-rpath","-Xlinker","@loader_path","@/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.product/Objects.LinkFileList","-target","arm64-apple-macosx13.0","-Xlinker","-add_ast_path","-Xlinker","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/Modules/DevToolbox.swiftmodule","-F","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-Xlinker","-rpath","-Xlinker","/Library/Developer/CommandLineTools/Library/Developer/Frameworks"]
+
+  "C.DevToolbox-arm64-apple-macosx15.0-debug.exe-entitlements":
+    tool: shell
+    inputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox-entitlement.plist"]
+    outputs: ["<DevToolbox-arm64-apple-macosx15.0-debug.exe-CodeSigning>"]
+    description: "Applying debug entitlements to ./.build/arm64-apple-macosx/debug/DevToolbox"
+    args: ["codesign","--force","--sign","-","--entitlements","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox-entitlement.plist","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox"]
+
+  "C.DevToolbox-arm64-apple-macosx15.0-debug.module":
+    tool: shell
+    inputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/App.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Components.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ContentView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/HotKeyManager.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ToolRegistry.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/CodecViews.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/HashTimeViews.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONEscapeView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONFormatView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONYAMLView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JWTView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/TextDiffView.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/sources"]
+    outputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/App.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/Components.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ContentView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HotKeyManager.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/ToolRegistry.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/CodecViews.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/HashTimeViews.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONEscapeView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONFormatView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JSONYAMLView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/JWTView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/TextDiffView.swift.o","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/Modules/DevToolbox.swiftmodule"]
+    description: "Compiling Swift Module 'DevToolbox' (12 sources)"
+    args: ["/Library/Developer/CommandLineTools/usr/bin/swiftc","-module-name","DevToolbox","-emit-dependencies","-emit-module","-emit-module-path","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/Modules/DevToolbox.swiftmodule","-output-file-map","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/output-file-map.json","-incremental","-c","@/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/DevToolbox.build/sources","-I","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/Modules","-target","arm64-apple-macosx13.0","-enable-batch-mode","-index-store-path","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/index/store","-Onone","-enable-testing","-j12","-DSWIFT_PACKAGE","-DDEBUG","-module-cache-path","/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/debug/ModuleCache","-parseable-output","-Xfrontend","-entry-point-function-name","-Xfrontend","DevToolbox_main","-swift-version","5","-F","/Library/Developer/CommandLineTools/Library/Developer/Frameworks","-sdk","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-g","-Xcc","-isysroot","-Xcc","/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk","-Xcc","-fPIC","-Xcc","-g","-package-name","my_tool","-disable-sandbox"]
+
+  "PackageStructure":
+    tool: package-structure-tool
+    inputs: ["/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Package.swift","/Users/bytedance/go/src/code.byted.org/kite/my_tool/Package.resolved"]
+    outputs: ["<PackageStructure>"]
+    description: "Planning build"
+    allow-missing-inputs: true
+

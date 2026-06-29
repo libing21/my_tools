@@ -1,0 +1,12 @@
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/App.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Components.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ContentView.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/HotKeyManager.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ToolRegistry.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/CodecViews.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/HashTimeViews.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONEscapeView.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONFormatView.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JSONYAMLView.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/JWTView.swift
+/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/Tools/TextDiffView.swift
