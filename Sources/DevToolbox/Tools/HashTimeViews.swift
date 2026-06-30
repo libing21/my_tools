@@ -49,17 +49,14 @@ private extension Sequence where Element == UInt8 {
 struct TimestampView: View {
     @State private var input = ""
     @State private var output = ""
-    @State private var now = ""
+    @State private var nowSeconds = ""
+    @State private var nowMillis = ""
+
+    private let ticker = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         ToolScaffold("时间戳互转", subtitle: "Unix 时间戳（秒/毫秒）与日期互转") {
-            HStack {
-                Button("当前时间戳") {
-                    let t = Date().timeIntervalSince1970
-                    now = "秒: \(Int(t))   毫秒: \(Int(t * 1000))"
-                }
-                if !now.isEmpty { Text(now).font(.callout).textSelection(.enabled) }
-            }
+            currentCard
             HStack(spacing: 12) {
                 EditorPane(title: "输入（时间戳或日期）", text: $input)
                 VStack {
@@ -72,7 +69,63 @@ struct TimestampView: View {
             }
             Text("日期格式示例：2026-06-29 21:00:00").font(.caption).foregroundColor(.secondary)
         }
+        .onAppear(perform: refreshNow)
+        .onReceive(ticker) { _ in refreshNow() }
     }
+
+    /// A bordered card showing the live current timestamp with per-field copy
+    /// and a quick "fill input" action.
+    private var currentCard: some View {
+        HStack(spacing: 16) {
+            Image(systemName: "clock.fill")
+                .font(.title2)
+                .foregroundColor(.accentColor)
+            VStack(alignment: .leading, spacing: 4) {
+                Text("当前时间戳").font(.caption).foregroundColor(.secondary)
+                HStack(spacing: 16) {
+                    timestampField(label: "秒", value: nowSeconds)
+                    Divider().frame(height: 24)
+                    timestampField(label: "毫秒", value: nowMillis)
+                }
+            }
+            Spacer()
+            Button {
+                input = nowSeconds
+                tsToDate()
+            } label: {
+                Label("填入并转换", systemImage: "arrow.down.to.line")
+            }
+        }
+        .padding(12)
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color(nsColor: .controlBackgroundColor)))
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(nsColor: .separatorColor)))
+    }
+
+    private func timestampField(label: String, value: String) -> some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(label).font(.caption2).foregroundColor(.secondary)
+            HStack(spacing: 6) {
+                Text(value)
+                    .font(.system(.title3, design: .monospaced))
+                    .textSelection(.enabled)
+                Button {
+                    NSPasteboard.general.clearContents()
+                    NSPasteboard.general.setString(value, forType: .string)
+                } label: {
+                    Image(systemName: "doc.on.clipboard")
+                }
+                .buttonStyle(.borderless)
+                .help("复制\(label)时间戳")
+            }
+        }
+    }
+
+    private func refreshNow() {
+        let t = Date().timeIntervalSince1970
+        nowSeconds = String(Int(t))
+        nowMillis = String(Int(t * 1000))
+    }
+
 
     private func tsToDate() {
         let trimmed = input.trimmingCharacters(in: .whitespacesAndNewlines)

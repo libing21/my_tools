@@ -24,6 +24,11 @@
     "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/release/DevToolbox.build/HotKeyManager~partial.swiftmodule",
     "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/release/DevToolbox.build/HotKeyManager.swiftdeps"
   },
+  "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/SelfTest.swift": {
+    "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/release/DevToolbox.build/SelfTest.swift.o",
+    "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/release/DevToolbox.build/SelfTest~partial.swiftmodule",
+    "swift-dependencies": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/release/DevToolbox.build/SelfTest.swiftdeps"
+  },
   "/Users/bytedance/go/src/code.byted.org/kite/my_tool/Sources/DevToolbox/ToolRegistry.swift": {
     "object": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/release/DevToolbox.build/ToolRegistry.swift.o",
     "swiftmodule": "/Users/bytedance/go/src/code.byted.org/kite/my_tool/.build/arm64-apple-macosx/release/DevToolbox.build/ToolRegistry~partial.swiftmodule",
