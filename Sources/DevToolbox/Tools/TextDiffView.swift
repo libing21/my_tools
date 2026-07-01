@@ -135,35 +135,117 @@ enum CharDiff {
     }
 }
 
+enum SmartDiff {
+    enum RowKind { case equal, replace, delete, insert }
+
+    struct Row: Identifiable {
+        let id = UUID()
+        let kind: RowKind
+        let leftNumber: Int?
+        let rightNumber: Int?
+        let leftText: String
+        let rightText: String
+    }
+
+    struct Result {
+        let rows: [Row]
+        let mode: String
+    }
+
+    static func compare(_ rawLeft: String, _ rawRight: String) -> Result {
+        let normalized = normalizeJSONIfPossible(rawLeft, rawRight)
+        return Result(rows: rows(left: normalized.left, right: normalized.right), mode: normalized.mode)
+    }
+
+    private static func normalizeJSONIfPossible(_ left: String, _ right: String) -> (left: String, right: String, mode: String) {
+        if case .success(let l) = JSONUtil.format(left, pretty: true),
+           case .success(let r) = JSONUtil.format(right, pretty: true) {
+            return (l, r, "JSON 已格式化后对比")
+        }
+        return (left, right, "文本对比")
+    }
+
+    private static func rows(left: String, right: String) -> [Row] {
+        let diff = DiffEngine.diff(left, right)
+        var rows: [Row] = []
+        var i = 0
+        while i < diff.count {
+            let line = diff[i]
+            if line.kind == .delete,
+               i + 1 < diff.count,
+               diff[i + 1].kind == .insert {
+                let next = diff[i + 1]
+                rows.append(Row(kind: .replace,
+                                leftNumber: line.leftNumber,
+                                rightNumber: next.rightNumber,
+                                leftText: line.text,
+                                rightText: next.text))
+                i += 2
+                continue
+            }
+
+            switch line.kind {
+            case .equal:
+                rows.append(Row(kind: .equal,
+                                leftNumber: line.leftNumber,
+                                rightNumber: line.rightNumber,
+                                leftText: line.text,
+                                rightText: line.text))
+            case .delete:
+                rows.append(Row(kind: .delete,
+                                leftNumber: line.leftNumber,
+                                rightNumber: nil,
+                                leftText: line.text,
+                                rightText: ""))
+            case .insert:
+                rows.append(Row(kind: .insert,
+                                leftNumber: nil,
+                                rightNumber: line.rightNumber,
+                                leftText: "",
+                                rightText: line.text))
+            }
+            i += 1
+        }
+        return rows
+    }
+}
+
 struct TextDiffView: View {
     @State private var left = ""
     @State private var right = ""
-    @State private var segments: [CharDiff.Segment] = []
-    @State private var compared = false
+    @State private var result: SmartDiff.Result?
+    @State private var onlyDiff = true
+
+    private var visibleRows: [SmartDiff.Row] {
+        let rows = result?.rows ?? []
+        return onlyDiff ? rows.filter { $0.kind != .equal } : rows
+    }
 
     private var changeCount: Int {
-        segments.filter { $0.kind != .equal }.count
+        (result?.rows ?? []).filter { $0.kind != .equal }.count
     }
 
     var body: some View {
-        ToolScaffold("文本对比", subtitle: "字符级对比：红色为删除，绿色为新增") {
+        ToolScaffold("文本对比", subtitle: "JSON 自动格式化；差异在左右两侧精确高亮") {
             HStack(spacing: 12) {
                 EditorPane(title: "原文 (左)", text: $left)
                 EditorPane(title: "对照 (右)", text: $right)
             }
             HStack(spacing: 12) {
-                Button("对比") { segments = CharDiff.diff(left, right); compared = true }
+                Button("对比") { result = SmartDiff.compare(left, right) }
                     .buttonStyle(.borderedProminent)
-                Button("清空") { left = ""; right = ""; segments = []; compared = false }
+                Button("清空") { left = ""; right = ""; result = nil }
+                Toggle("仅显示差异", isOn: $onlyDiff)
+                    .toggleStyle(.switch)
                 legend
                 Spacer()
-                if compared {
-                    Text(changeCount == 0 ? "完全一致" : "\(changeCount) 处不同")
+                if let result {
+                    Text(changeCount == 0 ? "完全一致" : "\(changeCount) 行不同 · \(result.mode)")
                         .font(.caption)
                         .foregroundColor(changeCount == 0 ? .green : .secondary)
                 }
             }
-            if compared {
+            if result != nil {
                 resultBlock
             }
         }
@@ -173,55 +255,144 @@ struct TextDiffView: View {
         HStack(spacing: 10) {
             HStack(spacing: 4) {
                 RoundedRectangle(cornerRadius: 3).fill(Color.red.opacity(0.28)).frame(width: 14, height: 14)
-                Text("删除").font(.caption2).foregroundColor(.secondary)
+                Text("左侧独有/删除").font(.caption2).foregroundColor(.secondary)
             }
             HStack(spacing: 4) {
                 RoundedRectangle(cornerRadius: 3).fill(Color.green.opacity(0.28)).frame(width: 14, height: 14)
-                Text("新增").font(.caption2).foregroundColor(.secondary)
+                Text("右侧独有/新增").font(.caption2).foregroundColor(.secondary)
             }
         }
     }
 
     private var resultBlock: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text("差异（合并视图）").font(.caption).foregroundColor(.secondary)
-            ScrollView {
-                Text(attributed)
-                    .font(.system(.body, design: .monospaced))
-                    .textSelection(.enabled)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .padding(10)
+            HStack(spacing: 0) {
+                Text("左侧").font(.caption).foregroundColor(.secondary).frame(maxWidth: .infinity, alignment: .leading)
+                Text("右侧").font(.caption).foregroundColor(.secondary).frame(maxWidth: .infinity, alignment: .leading)
+            }
+            ScrollView([.vertical, .horizontal]) {
+                LazyVStack(alignment: .leading, spacing: 0) {
+                    ForEach(visibleRows) { row in
+                        SmartDiffRow(row: row)
+                    }
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical, 6)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .background(RoundedRectangle(cornerRadius: 8).fill(Color(nsColor: .textBackgroundColor)))
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(nsColor: .separatorColor)))
         }
     }
+}
 
-    /// Build a single attributed string: deletions red + strikethrough on a red
-    /// wash, insertions green on a green wash, equal text normal.
-    private var attributed: AttributedString {
-        if changeCount == 0 && !segments.isEmpty {
-            var s = AttributedString(left.isEmpty ? "（无内容）" : left)
-            s.foregroundColor = .secondary
-            return s
+private struct SmartDiffRow: View {
+    let row: SmartDiff.Row
+
+    var body: some View {
+        HStack(alignment: .top, spacing: 0) {
+            cell(number: row.leftNumber, text: leftAttributed)
+                .background(leftBackground)
+            Divider()
+            cell(number: row.rightNumber, text: rightAttributed)
+                .background(rightBackground)
         }
+        .font(.system(.body, design: .monospaced))
+    }
+
+    private func cell(number: Int?, text: AttributedString) -> some View {
+        HStack(alignment: .top, spacing: 8) {
+            Text(number.map(String.init) ?? "")
+                .frame(width: 42, alignment: .trailing)
+                .foregroundColor(.secondary.opacity(0.6))
+            Text(text)
+                .textSelection(.enabled)
+                .frame(minWidth: 360, maxWidth: .infinity, alignment: .leading)
+        }
+        .padding(.horizontal, 6)
+        .padding(.vertical, 1)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+
+    private var leftBackground: Color {
+        switch row.kind {
+        case .delete: return Color.red.opacity(0.12)
+        default: return .clear
+        }
+    }
+
+    private var rightBackground: Color {
+        switch row.kind {
+        case .insert: return Color.green.opacity(0.12)
+        default: return .clear
+        }
+    }
+
+    private var leftAttributed: AttributedString {
+        switch row.kind {
+        case .equal:
+            return plain(row.leftText)
+        case .delete:
+            return styled(row.leftText, .delete)
+        case .insert:
+            return plain(" ")
+        case .replace:
+            return attributedSide(from: row.leftText, to: row.rightText, side: .left)
+        }
+    }
+
+    private var rightAttributed: AttributedString {
+        switch row.kind {
+        case .equal:
+            return plain(row.rightText)
+        case .delete:
+            return plain(" ")
+        case .insert:
+            return styled(row.rightText, .insert)
+        case .replace:
+            return attributedSide(from: row.leftText, to: row.rightText, side: .right)
+        }
+    }
+
+    private enum Side { case left, right }
+
+    private func attributedSide(from left: String, to right: String, side: Side) -> AttributedString {
+        let segments = CharDiff.diff(left, right)
         var result = AttributedString()
         for seg in segments {
-            var piece = AttributedString(seg.text)
-            switch seg.kind {
-            case .equal:
-                piece.foregroundColor = .primary
-            case .delete:
-                piece.foregroundColor = Color(nsColor: .systemRed)
-                piece.backgroundColor = Color.red.opacity(0.22)
-                piece.strikethroughStyle = .single
-            case .insert:
-                piece.foregroundColor = Color(nsColor: .systemGreen)
-                piece.backgroundColor = Color.green.opacity(0.22)
+            switch (side, seg.kind) {
+            case (.left, .insert), (.right, .delete):
+                continue
+            case (.left, .delete):
+                result += styled(seg.text, .delete)
+            case (.right, .insert):
+                result += styled(seg.text, .insert)
+            case (_, .equal):
+                result += plain(seg.text)
             }
-            result += piece
         }
         return result
+    }
+
+    private func plain(_ text: String) -> AttributedString {
+        var s = AttributedString(text.isEmpty ? " " : text)
+        s.foregroundColor = .primary
+        return s
+    }
+
+    private func styled(_ text: String, _ kind: CharDiff.Kind) -> AttributedString {
+        var s = AttributedString(text.isEmpty ? " " : text)
+        switch kind {
+        case .delete:
+            s.foregroundColor = Color(nsColor: .systemRed)
+            s.backgroundColor = Color.red.opacity(0.24)
+            s.strikethroughStyle = .single
+        case .insert:
+            s.foregroundColor = Color(nsColor: .systemGreen)
+            s.backgroundColor = Color.green.opacity(0.24)
+        case .equal:
+            s.foregroundColor = .primary
+        }
+        return s
     }
 }

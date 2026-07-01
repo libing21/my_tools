@@ -77,6 +77,14 @@ enum SelfTest {
         let same = CharDiff.diff("identical", "identical")
         check("chardiff.identical", same.allSatisfy { $0.kind == .equal })
 
+        let smart = SmartDiff.compare("{\"message_id\":\"a\",\"flag\":false,\"nested\":{\"x\":1}}",
+                                      "{\"message_id\":\"b\",\"flag\":true,\"nested\":{\"x\":1}}")
+        check("smartdiff.json.mode", smart.mode.contains("JSON"), smart.mode)
+        check("smartdiff.json.focused",
+              smart.rows.filter { $0.kind != .equal }.count > 0 &&
+              smart.rows.filter { $0.kind != .equal }.count < smart.rows.count,
+              "changes=\(smart.rows.filter { $0.kind != .equal }.count) total=\(smart.rows.count)")
+
         // Hash (known vectors for empty string)
         let empty = Data("".utf8)
         let md5 = Insecure.MD5.hash(data: empty).map { String(format: "%02x", $0) }.joined()
