@@ -1,0 +1,190 @@
+Sources/DevToolbox/Tools/JSONFormatView.swift
+  s_2ade44eaa6b0d1::t_2e38a660fe80f2 103-204,210-218,228-232,234,248-252,267-268,277-298,316,319-327 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a4ba8c38a77322e5a01e30c","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[103,204]},{"Range":[210,218]},{"Range":[228,232]},{"Single":234},{"Range":[248,252]},{"Range":[267,268]},{"Range":[277,298]},{"Single":316},{"Range":[319,327]}]}]}
+Sources/DevToolbox/Tools/TextDiffView.swift
+  s_2ade44eaa6b0d1::t_a22dc7491ca1f3 153-155,158-166,169,172,174,183-221,256,269,271,274-275,281,288-289,294-334,339,343,349,351-352,354,362,369-379
+Sources/DevToolbox/SelfTest.swift
+  s_2ade44eaa6b0d1::t_dde36adab1e1e4 32-43 gitai:{"mixed_line_ranges":[],"operations":[{"operation_id":"6a4ba9068a77322e5a01e332","tool_type":"agent","tool_id":"apply_patch","line_ranges":[{"Range":[32,43]}]}]}
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.5",
+  "base_commit_sha": "d0862074b568f71b1039c5b2e018c476f1cd3769",
+  "prompts": {},
+  "sessions": {
+    "s_2ade44eaa6b0d1": {
+      "agent_id": {
+        "tool": "trae",
+        "id": "6a426cb2cb15276a6afb64c6",
+        "model": "gpt-5.5__dev"
+      },
+      "human_author": "libing.21 <libing.21@bytedance.com>"
+    }
+  },
+  "attestation_metadata": {
+    "Sources/DevToolbox/SelfTest.swift": [
+      {
+        "hash": "s_2ade44eaa6b0d1::t_dde36adab1e1e4",
+        "line_ranges": [
+          {
+            "Range": [
+              32,
+              43
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a4ba9068a77322e5a01e332",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  32,
+                  43
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "Sources/DevToolbox/Tools/JSONFormatView.swift": [
+      {
+        "hash": "s_2ade44eaa6b0d1::t_2e38a660fe80f2",
+        "line_ranges": [
+          {
+            "Range": [
+              103,
+              204
+            ]
+          },
+          {
+            "Range": [
+              210,
+              218
+            ]
+          },
+          {
+            "Range": [
+              228,
+              232
+            ]
+          },
+          {
+            "Single": 234
+          },
+          {
+            "Range": [
+              248,
+              252
+            ]
+          },
+          {
+            "Range": [
+              267,
+              268
+            ]
+          },
+          {
+            "Range": [
+              277,
+              298
+            ]
+          },
+          {
+            "Single": 316
+          },
+          {
+            "Range": [
+              319,
+              327
+            ]
+          }
+        ],
+        "mixed_line_ranges": [],
+        "operations": [
+          {
+            "operation_id": "6a4ba8c38a77322e5a01e30c",
+            "tool_type": "agent",
+            "tool_id": "apply_patch",
+            "line_ranges": [
+              {
+                "Range": [
+                  103,
+                  204
+                ]
+              },
+              {
+                "Range": [
+                  210,
+                  218
+                ]
+              },
+              {
+                "Range": [
+                  228,
+                  232
+                ]
+              },
+              {
+                "Single": 234
+              },
+              {
+                "Range": [
+                  248,
+                  252
+                ]
+              },
+              {
+                "Range": [
+                  267,
+                  268
+                ]
+              },
+              {
+                "Range": [
+                  277,
+                  298
+                ]
+              },
+              {
+                "Single": 316
+              },
+              {
+                "Range": [
+                  319,
+                  327
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "remote_transcripts": {
+    "s_2ade44eaa6b0d1": {
+      "tool": "trae",
+      "conversation_id": "6a426cb2cb15276a6afb64c6",
+      "session_id": "6a426cb2cb15276a6afb64c6",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_2ade44eaa6b0d1::t_2e38a660fe80f2": {
+      "tool": "trae",
+      "conversation_id": "6a426cb2cb15276a6afb64c6",
+      "session_id": "6a426cb2cb15276a6afb64c6",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    },
+    "s_2ade44eaa6b0d1::t_dde36adab1e1e4": {
+      "tool": "trae",
+      "conversation_id": "6a426cb2cb15276a6afb64c6",
+      "session_id": "6a426cb2cb15276a6afb64c6",
+      "status": "remote_only",
+      "message": "Remote transcript resolution is not implemented yet for TRAE prompts."
+    }
+  }
+}
