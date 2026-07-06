@@ -44,7 +44,7 @@ struct ContentView: View {
                 }
                 .listStyle(.sidebar)
             }
-            .frame(minWidth: 220)
+            .frame(minWidth: 240)
         } detail: {
             if let tool = selectedTool {
                 tool.makeView()
@@ -53,6 +53,6 @@ struct ContentView: View {
                 Text("选择一个工具").foregroundColor(.secondary)
             }
         }
-        .frame(minWidth: 820, minHeight: 560)
+        .frame(minWidth: 1100, minHeight: 720)
     }
 }

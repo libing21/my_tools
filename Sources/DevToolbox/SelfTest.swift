@@ -78,7 +78,8 @@ enum SelfTest {
         check("chardiff.identical", same.allSatisfy { $0.kind == .equal })
 
         let smart = SmartDiff.compare("{\"message_id\":\"a\",\"flag\":false,\"nested\":{\"x\":1}}",
-                                      "{\"message_id\":\"b\",\"flag\":true,\"nested\":{\"x\":1}}")
+                                      "{\"message_id\":\"b\",\"flag\":true,\"nested\":{\"x\":1}}",
+                                      autoFormatJSON: true)
         check("smartdiff.json.mode", smart.mode.contains("JSON"), smart.mode)
         check("smartdiff.json.focused",
               smart.rows.filter { $0.kind != .equal }.count > 0 &&

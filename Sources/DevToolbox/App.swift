@@ -14,11 +14,15 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // copy/paste works in every text field.
         NSApp.mainMenu = Self.makeMainMenu()
 
+        let visibleFrame = NSScreen.main?.visibleFrame ?? NSRect(x: 0, y: 0, width: 1440, height: 900)
+        let initialWidth = min(max(visibleFrame.width * 0.82, 1180), 1500)
+        let initialHeight = min(max(visibleFrame.height * 0.82, 760), 980)
         let window = NSWindow(
-            contentRect: NSRect(x: 0, y: 0, width: 900, height: 600),
+            contentRect: NSRect(x: 0, y: 0, width: initialWidth, height: initialHeight),
             styleMask: [.titled, .closable, .miniaturizable, .resizable, .fullSizeContentView],
             backing: .buffered, defer: false)
         window.title = "DevToolbox"
+        window.minSize = NSSize(width: 1100, height: 720)
         window.center()
         window.titlebarAppearsTransparent = false
         window.isReleasedWhenClosed = false
