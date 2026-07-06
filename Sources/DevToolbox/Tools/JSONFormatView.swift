@@ -100,11 +100,122 @@ enum JSONHighlighter {
     }
 }
 
+enum JSONFoldEngine {
+    struct Range: Equatable {
+        let start: Int
+        let end: Int
+        let close: Character
+        let hasTrailingComma: Bool
+
+        var hiddenLineCount: Int { max(0, end - start - 1) }
+    }
+
+    struct VisibleLine: Identifiable {
+        let id: Int
+        let originalIndex: Int
+        let text: String
+        let foldRange: Range?
+        let isCollapsed: Bool
+    }
+
+    static func ranges(for lines: [String]) -> [Int: Range] {
+        var result: [Int: Range] = [:]
+        var stack: [(index: Int, open: Character, close: Character)] = []
+
+        for (idx, line) in lines.enumerated() {
+            let trimmed = line.trimmingCharacters(in: .whitespaces)
+            if let first = trimmed.first, first == "}" || first == "]" {
+                if let last = stack.last, last.close == first {
+                    stack.removeLast()
+                    if idx > last.index + 1 {
+                        result[last.index] = Range(start: last.index,
+                                                   end: idx,
+                                                   close: first,
+                                                   hasTrailingComma: trimmed.hasSuffix(","))
+                    }
+                }
+            }
+
+            if let open = trailingContainerOpen(in: line) {
+                stack.append((idx, open, open == "{" ? "}" : "]"))
+            }
+        }
+
+        return result
+    }
+
+    static func visibleLines(lines: [String], collapsed: Set<Int>, ranges: [Int: Range]) -> [VisibleLine] {
+        var visible: [VisibleLine] = []
+        var idx = 0
+        while idx < lines.count {
+            if let range = ranges[idx], collapsed.contains(idx) {
+                visible.append(VisibleLine(id: idx,
+                                           originalIndex: idx,
+                                           text: collapsedText(opening: lines[idx], range: range),
+                                           foldRange: range,
+                                           isCollapsed: true))
+                idx = range.end + 1
+            } else {
+                visible.append(VisibleLine(id: idx,
+                                           originalIndex: idx,
+                                           text: lines[idx],
+                                           foldRange: ranges[idx],
+                                           isCollapsed: false))
+                idx += 1
+            }
+        }
+        return visible
+    }
+
+    private static func collapsedText(opening: String, range: Range) -> String {
+        let comma = range.hasTrailingComma ? "," : ""
+        return "\(opening) … \(range.close)\(comma)  // folded \(range.hiddenLineCount) lines"
+    }
+
+    private static func trailingContainerOpen(in line: String) -> Character? {
+        var inString = false
+        var escaped = false
+        var lastSignificant: Character?
+
+        for ch in line {
+            if escaped {
+                escaped = false
+                continue
+            }
+            if ch == "\\" && inString {
+                escaped = true
+                continue
+            }
+            if ch == "\"" {
+                inString.toggle()
+                lastSignificant = ch
+                continue
+            }
+            if !inString && !ch.isWhitespace {
+                lastSignificant = ch
+            }
+        }
+
+        if lastSignificant == "{" { return "{" }
+        if lastSignificant == "[" { return "[" }
+        return nil
+    }
+}
+
 struct JSONFormatView: View {
     @State private var input = ""
     @State private var outputLines: [String] = []
     @State private var plainOutput = ""
     @State private var error: String?
+    @State private var collapsedLines: Set<Int> = []
+
+    private var foldRanges: [Int: JSONFoldEngine.Range] {
+        JSONFoldEngine.ranges(for: outputLines)
+    }
+
+    private var visibleOutputLines: [JSONFoldEngine.VisibleLine] {
+        JSONFoldEngine.visibleLines(lines: outputLines, collapsed: collapsedLines, ranges: foldRanges)
+    }
 
     var body: some View {
         ToolScaffold("JSON 格式化 / 压缩", subtitle: "校验并美化或压缩 JSON") {
@@ -114,9 +225,13 @@ struct JSONFormatView: View {
                     Button("格式化") { run(pretty: true) }
                         .buttonStyle(.borderedProminent)
                     Button("压缩") { run(pretty: false) }
-                    Button("清空") { input = ""; outputLines = []; plainOutput = ""; error = nil }
+                    Button("全部折叠") { collapsedLines = Set(foldRanges.keys) }
+                        .disabled(foldRanges.isEmpty)
+                    Button("全部展开") { collapsedLines = [] }
+                        .disabled(collapsedLines.isEmpty)
+                    Button("清空") { input = ""; outputLines = []; plainOutput = ""; error = nil; collapsedLines = [] }
                 }
-                .frame(width: 90)
+                .frame(width: 100)
                 jsonOutput
             }
             if let error = error {
@@ -130,6 +245,11 @@ struct JSONFormatView: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text("输出").font(.caption).foregroundColor(.secondary)
+                if !foldRanges.isEmpty {
+                    Text("可折叠 \(foldRanges.count) 个节点")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                }
                 Spacer()
                 if !plainOutput.isEmpty {
                     Button {
@@ -144,8 +264,8 @@ struct JSONFormatView: View {
                 HStack(alignment: .top, spacing: 0) {
                     // Line-number gutter.
                     VStack(alignment: .trailing, spacing: 0) {
-                        ForEach(Array(outputLines.enumerated()), id: \.offset) { idx, _ in
-                            Text("\(idx + 1)")
+                        ForEach(visibleOutputLines) { line in
+                            Text("\(line.originalIndex + 1)")
                                 .font(.system(.body, design: .monospaced))
                                 .foregroundColor(.secondary.opacity(0.6))
                         }
@@ -154,12 +274,28 @@ struct JSONFormatView: View {
                     .padding(.leading, 6)
 
                     VStack(alignment: .leading, spacing: 0) {
-                        ForEach(Array(outputLines.enumerated()), id: \.offset) { _, line in
-                            Text(JSONHighlighter.highlight(line: line))
-                                .font(.system(.body, design: .monospaced))
-                                .textSelection(.enabled)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .fixedSize(horizontal: true, vertical: false)
+                        ForEach(visibleOutputLines) { line in
+                            HStack(alignment: .firstTextBaseline, spacing: 4) {
+                                if let range = line.foldRange {
+                                    Button {
+                                        toggleFold(line.originalIndex)
+                                    } label: {
+                                        Image(systemName: line.isCollapsed ? "chevron.right" : "chevron.down")
+                                            .font(.system(size: 10, weight: .semibold))
+                                            .foregroundColor(.secondary)
+                                            .frame(width: 14)
+                                    }
+                                    .buttonStyle(.plain)
+                                    .help(line.isCollapsed ? "展开 \(range.hiddenLineCount) 行" : "折叠 \(range.hiddenLineCount) 行")
+                                } else {
+                                    Spacer().frame(width: 18)
+                                }
+                                Text(JSONHighlighter.highlight(line: line.text))
+                                    .font(.system(.body, design: .monospaced))
+                                    .textSelection(.enabled)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fixedSize(horizontal: true, vertical: false)
+                            }
                         }
                     }
                 }
@@ -177,9 +313,18 @@ struct JSONFormatView: View {
         case .success(let s):
             plainOutput = s
             outputLines = s.components(separatedBy: "\n")
+            collapsedLines = []
             error = nil
         case .failure(let e):
-            plainOutput = ""; outputLines = []; error = e
+            plainOutput = ""; outputLines = []; collapsedLines = []; error = e
+        }
+    }
+
+    private func toggleFold(_ line: Int) {
+        if collapsedLines.contains(line) {
+            collapsedLines.remove(line)
+        } else {
+            collapsedLines.insert(line)
         }
     }
 }

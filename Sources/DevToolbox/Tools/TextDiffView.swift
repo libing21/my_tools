@@ -150,19 +150,28 @@ enum SmartDiff {
     struct Result {
         let rows: [Row]
         let mode: String
+        let leftSource: String
+        let rightSource: String
+        let didFormatJSON: Bool
     }
 
-    static func compare(_ rawLeft: String, _ rawRight: String) -> Result {
-        let normalized = normalizeJSONIfPossible(rawLeft, rawRight)
-        return Result(rows: rows(left: normalized.left, right: normalized.right), mode: normalized.mode)
+    static func compare(_ rawLeft: String, _ rawRight: String, autoFormatJSON: Bool) -> Result {
+        let normalized = autoFormatJSON
+            ? normalizeJSONIfPossible(rawLeft, rawRight)
+            : (left: rawLeft, right: rawRight, mode: "文本对比", didFormatJSON: false)
+        return Result(rows: rows(left: normalized.left, right: normalized.right),
+                      mode: normalized.mode,
+                      leftSource: normalized.left,
+                      rightSource: normalized.right,
+                      didFormatJSON: normalized.didFormatJSON)
     }
 
-    private static func normalizeJSONIfPossible(_ left: String, _ right: String) -> (left: String, right: String, mode: String) {
+    private static func normalizeJSONIfPossible(_ left: String, _ right: String) -> (left: String, right: String, mode: String, didFormatJSON: Bool) {
         if case .success(let l) = JSONUtil.format(left, pretty: true),
            case .success(let r) = JSONUtil.format(right, pretty: true) {
-            return (l, r, "JSON 已格式化后对比")
+            return (l, r, "JSON 已格式化后对比", true)
         }
-        return (left, right, "文本对比")
+        return (left, right, "文本对比", false)
     }
 
     private static func rows(left: String, right: String) -> [Row] {
@@ -171,16 +180,45 @@ enum SmartDiff {
         var i = 0
         while i < diff.count {
             let line = diff[i]
-            if line.kind == .delete,
-               i + 1 < diff.count,
-               diff[i + 1].kind == .insert {
-                let next = diff[i + 1]
-                rows.append(Row(kind: .replace,
-                                leftNumber: line.leftNumber,
-                                rightNumber: next.rightNumber,
-                                leftText: line.text,
-                                rightText: next.text))
-                i += 2
+
+            if line.kind == .delete || line.kind == .insert {
+                var deletes: [DiffEngine.Line] = []
+                var inserts: [DiffEngine.Line] = []
+                while i < diff.count && diff[i].kind != .equal {
+                    if diff[i].kind == .delete {
+                        deletes.append(diff[i])
+                    } else {
+                        inserts.append(diff[i])
+                    }
+                    i += 1
+                }
+
+                let paired = min(deletes.count, inserts.count)
+                for idx in 0..<paired {
+                    rows.append(Row(kind: .replace,
+                                    leftNumber: deletes[idx].leftNumber,
+                                    rightNumber: inserts[idx].rightNumber,
+                                    leftText: deletes[idx].text,
+                                    rightText: inserts[idx].text))
+                }
+                if deletes.count > paired {
+                    for line in deletes[paired...] {
+                        rows.append(Row(kind: .delete,
+                                        leftNumber: line.leftNumber,
+                                        rightNumber: nil,
+                                        leftText: line.text,
+                                        rightText: ""))
+                    }
+                }
+                if inserts.count > paired {
+                    for line in inserts[paired...] {
+                        rows.append(Row(kind: .insert,
+                                        leftNumber: nil,
+                                        rightNumber: line.rightNumber,
+                                        leftText: "",
+                                        rightText: line.text))
+                    }
+                }
                 continue
             }
 
@@ -215,6 +253,7 @@ struct TextDiffView: View {
     @State private var right = ""
     @State private var result: SmartDiff.Result?
     @State private var onlyDiff = true
+    @State private var autoFormatJSON = true
 
     private var visibleRows: [SmartDiff.Row] {
         let rows = result?.rows ?? []
@@ -227,49 +266,92 @@ struct TextDiffView: View {
 
     var body: some View {
         ToolScaffold("文本对比", subtitle: "JSON 自动格式化；差异在左右两侧精确高亮") {
+            inputBlock
             HStack(spacing: 12) {
-                EditorPane(title: "原文 (左)", text: $left)
-                EditorPane(title: "对照 (右)", text: $right)
-            }
-            HStack(spacing: 12) {
-                Button("对比") { result = SmartDiff.compare(left, right) }
+                Button("对比") { compare() }
                     .buttonStyle(.borderedProminent)
                 Button("清空") { left = ""; right = ""; result = nil }
+                Toggle("JSON 自动格式化", isOn: $autoFormatJSON)
+                    .toggleStyle(.switch)
                 Toggle("仅显示差异", isOn: $onlyDiff)
                     .toggleStyle(.switch)
                 legend
                 Spacer()
                 if let result {
-                    Text(changeCount == 0 ? "完全一致" : "\(changeCount) 行不同 · \(result.mode)")
+                    Text(statusText(for: result))
                         .font(.caption)
                         .foregroundColor(changeCount == 0 ? .green : .secondary)
                 }
             }
             if result != nil {
                 resultBlock
+            } else {
+                emptyResultHint
             }
         }
+    }
+
+    private var inputBlock: some View {
+        HStack(spacing: 12) {
+            EditorPane(title: "原文 (左)", text: $left)
+            EditorPane(title: "对照 (右)", text: $right)
+        }
+        .frame(height: 220)
+    }
+
+    private var emptyResultHint: some View {
+        VStack(spacing: 8) {
+            Image(systemName: "arrow.left.and.right.text.vertical")
+                .font(.system(size: 28))
+                .foregroundColor(.secondary)
+            Text("粘贴两段文本或 JSON,点击对比")
+                .font(.headline)
+            Text("JSON 会先格式化、排序 key,再按行和字符高亮差异。")
+                .font(.caption)
+                .foregroundColor(.secondary)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(RoundedRectangle(cornerRadius: 10).fill(Color(nsColor: .controlBackgroundColor).opacity(0.55)))
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color(nsColor: .separatorColor)))
+    }
+
+    private func compare() {
+        let next = SmartDiff.compare(left, right, autoFormatJSON: autoFormatJSON)
+        result = next
+        if next.didFormatJSON {
+            left = next.leftSource
+            right = next.rightSource
+        }
+    }
+
+    private func statusText(for result: SmartDiff.Result) -> String {
+        if changeCount == 0 { return "完全一致 · \(result.mode)" }
+        let replace = result.rows.filter { $0.kind == .replace }.count
+        let delete = result.rows.filter { $0.kind == .delete }.count
+        let insert = result.rows.filter { $0.kind == .insert }.count
+        return "\(changeCount) 行不同 · 修改 \(replace) · 删除 \(delete) · 新增 \(insert) · \(result.mode)"
     }
 
     private var legend: some View {
         HStack(spacing: 10) {
             HStack(spacing: 4) {
                 RoundedRectangle(cornerRadius: 3).fill(Color.red.opacity(0.28)).frame(width: 14, height: 14)
-                Text("左侧独有/删除").font(.caption2).foregroundColor(.secondary)
+                Text("左侧删除").font(.caption2).foregroundColor(.secondary)
             }
             HStack(spacing: 4) {
                 RoundedRectangle(cornerRadius: 3).fill(Color.green.opacity(0.28)).frame(width: 14, height: 14)
-                Text("右侧独有/新增").font(.caption2).foregroundColor(.secondary)
+                Text("右侧新增").font(.caption2).foregroundColor(.secondary)
             }
         }
     }
 
     private var resultBlock: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 0) {
-                Text("左侧").font(.caption).foregroundColor(.secondary).frame(maxWidth: .infinity, alignment: .leading)
-                Text("右侧").font(.caption).foregroundColor(.secondary).frame(maxWidth: .infinity, alignment: .leading)
+                resultHeader("左侧", color: .red)
+                resultHeader("右侧", color: .green)
             }
+            .padding(.horizontal, 1)
             ScrollView([.vertical, .horizontal]) {
                 LazyVStack(alignment: .leading, spacing: 0) {
                     ForEach(visibleRows) { row in
@@ -277,12 +359,23 @@ struct TextDiffView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(.vertical, 6)
+                .padding(.vertical, 4)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .background(RoundedRectangle(cornerRadius: 8).fill(Color(nsColor: .textBackgroundColor)))
             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color(nsColor: .separatorColor)))
         }
+    }
+
+    private func resultHeader(_ title: String, color: Color) -> some View {
+        HStack(spacing: 6) {
+            Circle().fill(color.opacity(0.7)).frame(width: 7, height: 7)
+            Text(title).font(.caption).fontWeight(.semibold).foregroundColor(.secondary)
+        }
+        .padding(.vertical, 6)
+        .padding(.horizontal, 10)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color(nsColor: .controlBackgroundColor))
     }
 }
 

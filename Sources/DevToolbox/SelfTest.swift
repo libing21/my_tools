@@ -29,6 +29,18 @@ enum SelfTest {
             check("json.format.invalid", true)
         } else { check("json.format.invalid", false, "should have failed") }
 
+        if case .success(let s) = JSONUtil.format("{\"a\":{\"b\":1,\"c\":[1,2]},\"d\":3}", pretty: true) {
+            let lines = s.components(separatedBy: "\n")
+            let ranges = JSONFoldEngine.ranges(for: lines)
+            let root = ranges[0]
+            let nestedCount = ranges.count
+            let collapsed = JSONFoldEngine.visibleLines(lines: lines, collapsed: Set(ranges.keys), ranges: ranges)
+            check("json.fold.ranges", root?.start == 0 && (root?.end ?? 0) == lines.count - 1 && nestedCount >= 3,
+                  "ranges=\(nestedCount) root=\(String(describing: root))")
+            check("json.fold.visible", collapsed.count < lines.count && collapsed.first?.isCollapsed == true,
+                  "visible=\(collapsed.count) total=\(lines.count)")
+        } else { check("json.fold", false, "format failed") }
+
         // JSON -> YAML
         if case .success(let y) = YAMLUtil.jsonToYAML("{\"name\":\"x\",\"list\":[1,2],\"nested\":{\"k\":true}}") {
             check("yaml.fromJSON.keys", y.contains("name: x"), y)
